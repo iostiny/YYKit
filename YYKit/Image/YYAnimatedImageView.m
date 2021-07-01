@@ -445,7 +445,7 @@ typedef NS_ENUM(NSUInteger, YYAnimatedImageType) {
         if ([UIImageView instancesRespondToSelector:@selector(displayLayer:)]) {
             [super displayLayer:layer];
         }
-    }}
+    }
 }
 
 - (void)setContentsRect:(CGRect)rect forImage:(UIImage *)image{
