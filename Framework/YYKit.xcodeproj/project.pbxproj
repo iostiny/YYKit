@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 48;
+	objectVersion = 49;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D0C5B9926B24497009D1D4C /* YYRetryPolicyProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D0C5B9826B24497009D1D4C /* YYRetryPolicyProtocol.h */; };
 		D9B2616A1BEF52730038C00A /* NSArray+YYAdd.h in Headers */ = {isa = PBXBuildFile; fileRef = D9B260BC1BEF52730038C00A /* NSArray+YYAdd.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9B2616B1BEF52730038C00A /* NSArray+YYAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = D9B260BD1BEF52730038C00A /* NSArray+YYAdd.m */; };
 		D9B2616C1BEF52730038C00A /* NSBundle+YYAdd.h in Headers */ = {isa = PBXBuildFile; fileRef = D9B260BE1BEF52730038C00A /* NSBundle+YYAdd.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -187,6 +188,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1D0C5B9826B24497009D1D4C /* YYRetryPolicyProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYRetryPolicyProtocol.h; sourceTree = "<group>"; };
 		D9B260AB1BEF51350038C00A /* YYKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = YYKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9B260B71BEF51A90038C00A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D9B260BC1BEF52730038C00A /* NSArray+YYAdd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+YYAdd.h"; sourceTree = "<group>"; };
@@ -392,6 +394,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1D0C5B9726B24482009D1D4C /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				1D0C5B9826B24497009D1D4C /* YYRetryPolicyProtocol.h */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		D9B260A11BEF51350038C00A = {
 			isa = PBXGroup;
 			children = (
@@ -555,6 +565,7 @@
 		D9B261041BEF52730038C00A /* Image */ = {
 			isa = PBXGroup;
 			children = (
+				1D0C5B9726B24482009D1D4C /* Protocol */,
 				D9B261141BEF52730038C00A /* YYImage.h */,
 				D9B261151BEF52730038C00A /* YYImage.m */,
 				D9B261121BEF52730038C00A /* YYFrameImage.h */,
@@ -712,6 +723,7 @@
 				D9B261CB1BEF52750038C00A /* YYClassInfo.h in Headers */,
 				D9B261F71BEF52780038C00A /* YYDispatchQueuePool.h in Headers */,
 				D9B261CF1BEF52750038C00A /* YYTextDebugOption.h in Headers */,
+				1D0C5B9926B24497009D1D4C /* YYRetryPolicyProtocol.h in Headers */,
 				D9B261C51BEF52750038C00A /* YYWebImageManager.h in Headers */,
 				D9B261961BEF52730038C00A /* UIFont+YYAdd.h in Headers */,
 				D9B261841BEF52730038C00A /* NSTimer+YYAdd.h in Headers */,

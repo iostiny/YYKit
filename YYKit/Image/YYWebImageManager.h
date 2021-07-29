@@ -10,12 +10,15 @@
 //
 
 #import <UIKit/UIKit.h>
-
 #if __has_include(<YYKit/YYKit.h>)
 #import <YYKit/YYImageCache.h>
+#import <YYKit/YYRetryPolicyProtocol.h>
 #else
 #import "YYImageCache.h"
+#import "YYRetryPolicyProtocol.h"
 #endif
+
+UIKIT_EXTERN NSString *const YYWebImageRequestErrorNotification;
 
 @class YYWebImageOperation;
 
@@ -147,8 +150,8 @@ typedef UIImage * _Nullable (^YYWebImageTransformBlock)(UIImage *image, NSURL *u
  @param image       The image.
  @param url         The image url (remote or local file path).
  @param from        Where the image came from.
- @param stage       Current download stage.
  @param error       Error during image fetching.
+ @param stage    If the operation is cancelled, this value is NO, otherwise YES.
  */
 typedef void (^YYWebImageCompletionBlock)(UIImage * _Nullable image,
                                           NSURL *url,
@@ -170,6 +173,8 @@ typedef void (^YYWebImageCompletionBlock)(UIImage * _Nullable image,
  @return YYWebImageManager shared instance.
  */
 + (instancetype)sharedManager;
+
+@property (weak, nonatomic) id<YYRetryPolicyProtocol>   retryProtocol;
 
 /**
  Creates a manager with an image cache and operation queue.
@@ -202,7 +207,7 @@ typedef void (^YYWebImageCompletionBlock)(UIImage * _Nullable image,
                                            completion:(nullable YYWebImageCompletionBlock)completion;
 
 /**
- The image cache used by image operation. 
+ The image cache used by image operation.
  You can set it to nil to avoid image cache.
  */
 @property (nullable, nonatomic, strong) YYImageCache *cache;
@@ -211,7 +216,7 @@ typedef void (^YYWebImageCompletionBlock)(UIImage * _Nullable image,
  The operation queue on which image operations are scheduled and run.
  You can set it to nil to make the new operation start immediately without queue.
  
- You can use this queue to control maximum number of concurrent operations, to obtain 
+ You can use this queue to control maximum number of concurrent operations, to obtain
  the status of the current operations, or to cancel all operations in this manager.
  */
 @property (nullable, nonatomic, strong) NSOperationQueue *queue;

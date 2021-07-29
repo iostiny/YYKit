@@ -29,11 +29,16 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Current image URL.
  
- @discussion Set a new value to this property will cancel the previous request 
- operation and create a new request operation to fetch image. Set nil to clear 
+ @discussion Set a new value to this property will cancel the previous request
+ operation and create a new request operation to fetch image. Set nil to clear
  the image and image URL.
  */
 @property (nullable, nonatomic, strong) NSURL *imageURL;
+
+/**
+ 原始请求URL地址
+ */
+@property (nullable, nonatomic, strong) NSURL *orignUrl;
 
 /**
  Set the view's `image` with a specified URL.

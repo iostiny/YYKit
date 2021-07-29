@@ -30,24 +30,34 @@ static int _YYWebImageHighlightedSetterKey;
     return setter.imageURL;
 }
 
+- (void)setOrignUrl:(NSURL *)orignUrl {
+    objc_setAssociatedObject(self, @selector(orignUrl), orignUrl, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSURL *)orignUrl {
+    return objc_getAssociatedObject(self, @selector(orignUrl));
+}
+
 /*
  "setImageWithURL" is conflict to AFNetworking and SDWebImage...WTF!
  So.. We use "setImageURL:" instead.
  */
+//默认动画渐隐渐现
 - (void)setImageURL:(NSURL *)imageURL {
     [self setImageWithURL:imageURL
               placeholder:nil
-                  options:kNilOptions
+                  options:YYWebImageOptionSetImageWithFadeAnimation
                   manager:nil
                  progress:nil
                 transform:nil
                completion:nil];
 }
 
+//默认动画渐隐渐现
 - (void)setImageWithURL:(NSURL *)imageURL placeholder:(UIImage *)placeholder {
     [self setImageWithURL:imageURL
               placeholder:placeholder
-                  options:kNilOptions
+                  options:YYWebImageOptionSetImageWithFadeAnimation
                   manager:nil
                  progress:nil
                 transform:nil
@@ -101,7 +111,11 @@ static int _YYWebImageHighlightedSetterKey;
              completion:(YYWebImageCompletionBlock)completion {
     if ([imageURL isKindOfClass:[NSString class]]) imageURL = [NSURL URLWithString:(id)imageURL];
     manager = manager ? manager : [YYWebImageManager sharedManager];
-    
+    if ([manager.retryProtocol respondsToSelector:@selector(masterRequestStr:)]) {
+        NSString *masterStr = [manager.retryProtocol masterRequestStr:imageURL.absoluteString];
+        imageURL = [NSURL URLWithString:masterStr];
+    }
+    self.orignUrl = imageURL;
     _YYWebImageSetter *setter = objc_getAssociatedObject(self, &_YYWebImageSetterKey);
     if (!setter) {
         setter = [_YYWebImageSetter new];
@@ -156,6 +170,12 @@ static int _YYWebImageHighlightedSetterKey;
             __block __weak typeof(setter) weakSetter = nil;
             YYWebImageCompletionBlock _completion = ^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) {
                 __strong typeof(_self) self = _self;
+                if ((!image && stage == YYWebImageStageFinished) || error) {
+                    if (self) {
+                        NSDictionary *dic = @{@"orignUrl":url?url.absoluteString:@"", @"errCode":[NSNumber numberWithInteger:error.code],@"image" : self};
+                        [[NSNotificationCenter defaultCenter] postNotificationName:YYWebImageRequestErrorNotification object:dic];
+                    }
+                }
                 BOOL setImage = (stage == YYWebImageStageFinished || stage == YYWebImageStageProgress) && image && !(options & YYWebImageOptionAvoidSetImage);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     BOOL sentinelChanged = weakSetter && weakSetter.sentinel != newSentinel;
@@ -164,7 +184,7 @@ static int _YYWebImageHighlightedSetterKey;
                         if (showFade) {
                             CATransition *transition = [CATransition animation];
                             transition.duration = stage == YYWebImageStageFinished ? _YYWebImageFadeTime : _YYWebImageProgressiveFadeTime;
-                            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
                             transition.type = kCATransitionFade;
                             [self.layer addAnimation:transition forKey:_YYWebImageFadeAnimationKey];
                         }

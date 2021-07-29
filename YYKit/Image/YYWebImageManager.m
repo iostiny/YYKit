@@ -14,6 +14,8 @@
 #import "YYWebImageOperation.h"
 #import "YYImageCoder.h"
 
+NSString *const YYWebImageRequestErrorNotification = @"YYWebImageRequestErrorNotification";
+
 @implementation YYWebImageManager
 
 + (instancetype)sharedManager {
@@ -63,13 +65,19 @@
     request.cachePolicy = (options & YYWebImageOptionUseNSURLCache) ?
         NSURLRequestUseProtocolCachePolicy : NSURLRequestReloadIgnoringLocalCacheData;
     
+    YYWebImageCompletionBlock operationCompletion = ^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) {
+        if (completion) {
+            completion(image, url, from, stage, error);
+        }
+    };
+    
     YYWebImageOperation *operation = [[YYWebImageOperation alloc] initWithRequest:request
                                                                           options:options
                                                                             cache:_cache
                                                                          cacheKey:[self cacheKeyForURL:url]
                                                                          progress:progress
                                                                         transform:transform ? transform : _sharedTransformBlock
-                                                                       completion:completion];
+                                                                       completion:operationCompletion];
 
     if (_username && _password) {
         operation.credential = [NSURLCredential credentialWithUser:_username password:_password persistence:NSURLCredentialPersistenceForSession];
